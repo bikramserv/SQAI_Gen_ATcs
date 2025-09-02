@@ -1,0 +1,115 @@
+{
+	"info": {
+		"_postman_id": "bf98587d-5fa8-484a-85b7-699162625a69",
+		"name": "Getwayzapi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "205882"
+	},
+	"item": [
+		{
+			"name": "Call_Map_Data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Map_Url}}",
+					"host": [
+						"{{Map_Url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ADd_Data2_map",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"jsondata should not be null\", function () {\r",
+							"    pm.expect(jsonData).to.not.be.null;\r",
+							"\r",
+							"});\r",
+							"\r",
+							"if (jsonData == null && pm.response.to.have.status(201)) {\r",
+							"\r",
+							"    pm.environment.set(\"Map_Created_Id\" , jsonData.id);\r",
+							"\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// UUID\r",
+							"pm.variables.set(\"uuid\", crypto.randomUUID());\r",
+							"\r",
+							"// Random plot number (as string)\r",
+							"pm.variables.set(\"plotNo\", Math.floor(Math.random() * 1000).toString());\r",
+							"\r",
+							"// Random coordinates\r",
+							"pm.variables.set(\"longitude\", (80 + Math.random()).toFixed(5));\r",
+							"pm.variables.set(\"latitude\", (81 + Math.random()).toFixed(5));\r",
+							"\r",
+							"// Random suffix for strings\r",
+							"const randomSuffix = Math.floor(Math.random() * 10000);\r",
+							"\r",
+							"// Strings with suffix\r",
+							"pm.variables.set(\"street\", \"VillageStreet\" + randomSuffix);\r",
+							"pm.variables.set(\"town\", \"Town\" + randomSuffix);\r",
+							"pm.variables.set(\"postCode\", \"5121\" + randomSuffix);\r",
+							"pm.variables.set(\"village\", \"VillageName\" + randomSuffix);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \r\n    \"id\": \"{{uuid}}\",\r\n    \"plotNo\": \"{{plotNo}}\",\r\n    \"longitude\": {{longitude}},\r\n    \"latitude\": {{latitude}},\r\n    \"street\": \"{{street}}\",\r\n    \"town\": \"{{town}}\",\r\n    \"postCode\": \"{{postCode}}\",\r\n    \"village\": \"{{village}}\"\r\n  }\r\n  ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Map_Url}}",
+					"host": [
+						"{{Map_Url}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

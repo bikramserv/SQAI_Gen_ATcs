@@ -42,20 +42,14 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Status code is 201\", function () {\r",
-							"    pm.response.to.have.status(201);\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
 							"});\r",
 							"\r",
 							"var jsonData = pm.response.json();\r",
-							"pm.test(\"jsondata should not be null\", function () {\r",
+							"pm.test(\"jsonData should not be null\", function () {\r",
 							"    pm.expect(jsonData).to.not.be.null;\r",
-							"\r",
 							"});\r",
-							"\r",
-							"if (jsonData == null && pm.response.to.have.status(201)) {\r",
-							"\r",
-							"    pm.environment.set(\"Map_Created_Id\" , jsonData.id);\r",
-							"\r",
-							"}"
+							""
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -65,20 +59,19 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"// UUID\r",
-							"pm.variables.set(\"uuid\", crypto.randomUUID());\r",
 							"\r",
-							"// Random plot number (as string)\r",
+							"\r",
+							"// Random plot number\r",
 							"pm.variables.set(\"plotNo\", Math.floor(Math.random() * 1000).toString());\r",
 							"\r",
 							"// Random coordinates\r",
 							"pm.variables.set(\"longitude\", (80 + Math.random()).toFixed(5));\r",
 							"pm.variables.set(\"latitude\", (81 + Math.random()).toFixed(5));\r",
 							"\r",
-							"// Random suffix for strings\r",
+							"// Random suffix\r",
 							"const randomSuffix = Math.floor(Math.random() * 10000);\r",
 							"\r",
-							"// Strings with suffix\r",
+							"// Random address fields\r",
 							"pm.variables.set(\"street\", \"VillageStreet\" + randomSuffix);\r",
 							"pm.variables.set(\"town\", \"Town\" + randomSuffix);\r",
 							"pm.variables.set(\"postCode\", \"5121\" + randomSuffix);\r",
@@ -95,7 +88,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n \r\n    \"id\": \"{{uuid}}\",\r\n    \"plotNo\": \"{{plotNo}}\",\r\n    \"longitude\": {{longitude}},\r\n    \"latitude\": {{latitude}},\r\n    \"street\": \"{{street}}\",\r\n    \"town\": \"{{town}}\",\r\n    \"postCode\": \"{{postCode}}\",\r\n    \"village\": \"{{village}}\"\r\n  }\r\n  ",
+					"raw": "{ \r\n    \"id\": \"{{$guid}}\",\r\n    \"plotNo\": \"{{plotNo}}\",\r\n    \"longitude\": {{longitude}},\r\n    \"latitude\": {{latitude}},\r\n    \"street\": \"{{street}}\",\r\n    \"town\": \"{{town}}\",\r\n    \"postCode\": \"{{postCode}}\",\r\n    \"village\": \"{{village}}\"\r\n  }\r\n  ",
 					"options": {
 						"raw": {
 							"language": "json"
